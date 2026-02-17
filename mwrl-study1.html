@@ -226,6 +226,31 @@
 
         //timeline.push(thoughtprobe);
 
+        var motivationprobe_template = function(emoji, label){
+            return(`<div style='text-align:center;'><div style='font-size:120px;'>${emoji}</div><div style='font-size:18px; font-weight:bold; margin-top:10px;'>${label}</div></div>`);
+        }
+
+        var motivationprobe = {
+            type: "2afc-reward-mm",
+            stimuli: {left: motivationprobe_template("\ud83d\udcaa", "motivated"),
+                      right: motivationprobe_template("\ud83e\udd37", "not motivated")},
+            feedback_stimuli: {
+                left: feedback_stimulus_template("thumbsup"),
+                right: feedback_stimulus_template("thumbsup"),
+                timeout: feedback_stimulus_template("timeout")
+            },
+            feedback_duration: 500,
+            max_decision_time: Infinity,
+            total_trial_duration: 3600,
+            width: "400px",
+            distance: "50px",
+            responses: {
+                left: "f",
+                right:"j"
+            },
+            data: jsPsych.timelineVariable('data')
+        }
+
         /** ------------ TASK SETUP -------------- **/
         var countdown={
             type: "countdown-mm",
@@ -399,6 +424,25 @@
                 not paying attention or mind wandering, please press the "<b>J</b>"-key.
                 `,
                 `
+                <h2>How motivated are you?</h2>
+                <br>
+                <p>
+                Right after each attention question, we will also ask you about your current <b>motivation</b>.
+                You will see these two symbols:
+                <div style="display:grid;grid-template-columns:300px 100px 300px;
+                          align-items: center;justify-items: center;">
+                    <div style='font-size:100px;'>&#x1F4AA;</div>
+                    <div></div>
+                    <div style='font-size:100px;'>&#x1F937;</div>
+                    <b>(motivated)</b>
+                    <div></div>
+                    <b>(not motivated)</b>
+                </div>
+                <p>If you currently feel <b>motivated</b>, press the "<b>F</b>"-key.
+                If you currently feel <b>not motivated</b>, press the "<b>J</b>"-key.</p>
+                <p>Again, there are no right or wrong answers. Just tell us how you feel at the moment.</p>
+                `,
+                `
                 <h2>Let's try!</h2>
                 <br>
                 <p>Let's try and get started with a practice session!</p>
@@ -465,7 +509,19 @@
                         data: {
                             training: 1,
                             trial: i+1,
-                            probetrial: probe_count_train+1
+                            probetrial: probe_count_train+1,
+                            probe_type: "attention"
+                        }
+                    }]
+                });
+                timeline.push({
+                    timeline: [motivationprobe],
+                    timeline_variables: [{
+                        data: {
+                            training: 1,
+                            trial: i+1,
+                            probetrial: probe_count_train+1,
+                            probe_type: "motivation"
                         }
                     }]
                 });
@@ -559,7 +615,19 @@
                         data: {
                             training: 0,
                             trial: i+1,
-                            probetrial: probe_count+1
+                            probetrial: probe_count+1,
+                            probe_type: "attention"
+                        }
+                    }]
+                });
+                timeline.push({
+                    timeline: [motivationprobe],
+                    timeline_variables: [{
+                        data: {
+                            training: 0,
+                            trial: i+1,
+                            probetrial: probe_count+1,
+                            probe_type: "motivation"
                         }
                     }]
                 });
