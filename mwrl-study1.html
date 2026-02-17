@@ -12,6 +12,7 @@
     <script src="jsPsych/plugins/jspsych-fullscreen.js" charset="utf-8"></script>
     <script src="jsPsych/plugins/jspsych-survey-text.js" charset="utf-8"></script>
     <script src="jsPsych/plugins/jspsych-preload.js" charset="utf-8"></script>
+    <script src="jsPsych/plugins/jspsych-html-slider-response.js" charset="utf-8"></script>
     <script src="plugins/jspsych-2afc-reward-mm.js" charset="utf-8"></script>
     <script src="/assets/javascripts/jatos.js"></script>
     <script src="js/utils.js"></script>
@@ -36,8 +37,12 @@
         var plusminus_probe_train = 2; // randomness in probe presentation (+/- trials every ntrials/nprobes)
 
         if(debug){
-         //   nstim=3;
-           // ntrials_per_stimpair=1;
+            nstim = 3;  // 3 stimuli -> 3 pairs -> 10 choice trials + 1 probe
+            ntrials_per_stimpair = 3;
+            ntrials_per_stimpair_train = 0;
+            nprobes = 1;
+            nprobes_train = 0;
+            fullscreen = false;
         }
 
         var ntrials = ntrials_per_stimpair * nstim*(nstim-1)/2; // number of trials: 10*(6*(6-1))/2=150
@@ -465,10 +470,10 @@
         /** ------------ TRAINING  -------------- **/
 
         var stim_trialcount_train = Array(nstim).fill(0); // count how often each stimulus was shown
-        var design_train = Array(ntrials_train); 
+        var design_train = Array(ntrials_train);
         var probe_count_train = 0;
 
-        timeline.push(countdown);
+        if(!debug) timeline.push(countdown);
 
         for(let i=0; i<ntrials_train; i++){
             var lstim=stimpairs_train[i][0];
@@ -656,6 +661,36 @@
             post_trial_gap: 1000
         }
         timeline.push(instruction_final);
+
+        /** ------------ slider questions -------------- **/
+        var agency_slider = {
+            type: 'html-slider-response',
+            stimulus: `<h3>Sense of control</h3>
+                <p>How much control did you feel you had over the outcomes<br>
+                (i.e., the points you received)?</p>`,
+            labels: ['0<br>No control at all', '50', '100<br>Complete control'],
+            min: 0,
+            max: 100,
+            slider_start: 50,
+            slider_width: 600,
+            button_label: 'Continue',
+            data: {question: 'agency'}
+        }
+        timeline.push(agency_slider);
+
+        var difficulty_slider = {
+            type: 'html-slider-response',
+            stimulus: `<h3>Task difficulty</h3>
+                <p>How difficult did you find the task?</p>`,
+            labels: ['0<br>Very easy', '50', '100<br>Very difficult'],
+            min: 0,
+            max: 100,
+            slider_start: 50,
+            slider_width: 600,
+            button_label: 'Continue',
+            data: {question: 'difficulty'}
+        }
+        timeline.push(difficulty_slider);
 
         /** ------------ /open feedback --------------**/
         var comments = {
