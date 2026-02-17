@@ -1,0 +1,65 @@
+
+body {
+    background-color: white;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.jspsych-instructions-mm {
+     width: 700px;
+     text-align: left;
+}
+ 
+.emph {
+    color: orange;
+    font-weight: bold;
+}
+
+.title {
+    font-size:60px;
+    line-height: 60px;
+}
+
+.jspsych-instructions-mm h1 {
+    font-size:60px;
+    line-height: 60px;
+}
+
+.jspsych-instructions-mm b {
+    color: blue;
+    font-weight: bold;
+}
+
+.jspsych-instructions-mm ul {
+    /*list-style-type: outside;*/
+    padding: 0;
+    text-align: left;
+    width: 80%;
+    margin: auto;
+}
+
+.jspsych-countdown-mm-digit {
+    font-size:100px;
+    line-height:100px;
+    color: orange;
+    font-weight: bold;
+}
+
+.jspsych-survey-likert-statement { display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px; }
+.jspsych-survey-likert-opts { list-style:none; width:100%; margin:0; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }
+.jspsych-survey-likert-opt-label { line-height: 1.1em; color: #444; }
+.jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }
+.jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }.jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }
+.jspsych-survey-likert-opts li input[type=radio] { display:block; position:relative; top:0; left:50%; margin-left:-6px; }
+
+
+/* format hints for the Quiz */
+#jspsych-quiz-multi-choice-hint { border: solid red; padding: 10px 10px 10px 10px; margin: 10px 10px 10px 10px;};
+
+.jspsych-quiz-multi-choice-question { text-align: center;};
+
+/*.jspsych-survey-multi-choice-option { list-style:none; width:100%; margin:0; padding:0 40px 20px; display:inline; font-size: 14px; line-height:1.1em; }*/
