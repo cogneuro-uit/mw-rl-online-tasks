@@ -30,7 +30,7 @@
         var nstim = 6; // number of stimuli
         var ntrials_per_stimpair = 20; // number of trials per stimulus pair
         var ntrials_per_stimpair_train = 1; // number of trials per stimulus pair
-        var nprobes = 20; // number of thought probes
+        var nprobes = 30; // number of thought probes
         var plusminus_probe = 5; // randomness in probe presentation (+/- trials every ntrials/nprobes)
         var nprobes_train = 5; // number of thought probes during training
         var plusminus_probe_train = 2; // randomness in probe presentation (+/- trials every ntrials/nprobes)
@@ -96,7 +96,7 @@
             // we shuffle each of the repetitions of the stimulus pairs separately
             // to avoid long runs where a stimulus is not shown
             cstimpairs = jsPsych.randomization.shuffle(cstimpairs);
-            stimpairs_train = stimpairs.concat(cstimpairs);
+            stimpairs_train = stimpairs_train.concat(cstimpairs);
         }
 
         /* create timeline */
@@ -214,7 +214,7 @@
             },
             feedback_duration: 500,
             max_decision_time: Infinity,
-            total_trial_duration: 3500,
+            total_trial_duration: 3600,
             width: "400px",
             distance: "50px",
             responses: {
