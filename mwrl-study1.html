@@ -187,7 +187,7 @@
             on_finish: function(data){
                 if(!debug){
                     // check whether there were no responses for the last couple of trials
-                    var tldat=jsPsych.data.getLastTimelineData().last(check_misses_nback).values();
+                    var tldat=jsPsych.data.get().filter({trial_type: "2afc-reward-mm"}).last(check_misses_nback).values();
                     var nresp=tldat.map(function(el){return(Number(el.selected!="none"))}).reduce((a,b) => {return a+b;})
                     //var grace=tldat.map(function(el){return(el.stopped_responding)}).reduce((a,b)=>{return a+b;});
                     if(tldat.length==check_misses_nback & nresp==0){
