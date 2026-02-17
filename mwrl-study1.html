@@ -103,7 +103,7 @@
         var timeline = [];
 
         // preload all images
-        var images = ['stimuli/knockedout.png', 'stimuli/ontask.png', 'stimuli/offtask.png', 'stimuli/thumbsup.png'];
+        var images = ['stimuli/knockedout.png', 'stimuli/ontask.png', 'stimuli/offtask.png', 'stimuli/thumbsup.png', 'stimuli/motivated.png', 'stimuli/unmotivated.png'];
         for(let i=1; i<=nstim; i++){
             images.push("stimuli/session1/"+i+".jpg")
             images.push("stimuli/session2/"+i+".jpg")
@@ -226,14 +226,10 @@
 
         //timeline.push(thoughtprobe);
 
-        var motivationprobe_template = function(emoji, label){
-            return(`<div style='text-align:center;'><div style='font-size:120px;'>${emoji}</div><div style='font-size:18px; font-weight:bold; margin-top:10px;'>${label}</div></div>`);
-        }
-
         var motivationprobe = {
             type: "2afc-reward-mm",
-            stimuli: {left: motivationprobe_template("\ud83d\udcaa", "motivated"),
-                      right: motivationprobe_template("\ud83e\udd37", "not motivated")},
+            stimuli: {left: thoughtprobe_template("stimuli/motivated.png"),
+                      right: thoughtprobe_template("stimuli/unmotivated.png")},
             feedback_stimuli: {
                 left: feedback_stimulus_template("thumbsup"),
                 right: feedback_stimulus_template("thumbsup"),
@@ -431,9 +427,9 @@
                 You will see these two symbols:
                 <div style="display:grid;grid-template-columns:300px 100px 300px;
                           align-items: center;justify-items: center;">
-                    <div style='font-size:100px;'>&#x1F4AA;</div>
+                    <img src='stimuli/motivated.png' width='150px'>
                     <div></div>
-                    <div style='font-size:100px;'>&#x1F937;</div>
+                    <img src='stimuli/unmotivated.png' width='150px'>
                     <b>(motivated)</b>
                     <div></div>
                     <b>(not motivated)</b>
