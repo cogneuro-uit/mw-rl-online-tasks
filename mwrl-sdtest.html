@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RL-MW SD Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="jsPsych/jspsych.js" charset="utf-8"></script>
+    <script src="plugins/jspsych-countdown-mm.js" charset="utf-8"></script>
+    <script src="jsPsych/plugins/jspsych-html-button-response.js" charset="utf-8"></script>
+    <script src="jsPsych/plugins/jspsych-html-keyboard-response.js" charset="utf-8"></script>
+    <script src="jsPsych/plugins/jspsych-fullscreen.js" charset="utf-8"></script>
+    <script src="jsPsych/plugins/jspsych-preload.js" charset="utf-8"></script>
+    <script src="plugins/jspsych-2afc-reward-mm.js" charset="utf-8"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src="js/utils.js"></script>
+    <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css">
+    </link>
+    <link href="css/plugins-mm.css" rel="stylesheet" type="text/css">
+    </link>
+</head>
+
+<body>
+    <script>
+
+        /** ------------ PARAMETERS -------------- **/
+        var debug = false;
+        var fullscreen = true;
+        var nstim = 6;
+        var ntrials_per_stimpair = 5;
+        var ntrials = ntrials_per_stimpair * nstim*(nstim-1)/2; // 5*15 = 75
+        var ntrials_per_stim = ntrials_per_stimpair*(nstim-1);  // 5*5 = 25
+
+        var reward_lower = 0;
+        var reward_upper = 20;
+        var sd_conditions = [2, 4, 6];
+        var sd_order = jsPsych.randomization.shuffle(sd_conditions);
+
+        var stimdir = "stimuli/session1/";
+        var stimuli = Array(nstim).fill().map((v,i) => `${stimdir}/${++i}.jpg`);
+
+        var check_misses_nback = 3;
+        var uid = jsPsych.randomization.randomID(12);
+        var datetime = Date().toLocaleString();
+
+        /** ------------ HELPER FUNCTIONS -------------- **/
+        function getRandomWalk(n, sig, ll, ul) {
+            var rw = new Array(n);
+            rw[0] = getRandomInt(ll, ul);
+            for (var i = 1; i < n; i++) {
+                inc = Math.round(gaussianRandom(0, sig));
+                rw[i] = rw[i - 1] + inc;
+                if(rw[i]<ll){
+                    rw[i]=ll+Math.abs(rw[i]-ll);
+                }
+                if(rw[i]>ul){
+                    rw[i]=ul-Math.abs(rw[i]-ul);
+                }
+            }
+            return rw;
+        };
+
+        function gaussianRandom(mean=0, stdev=1) {
+            let u = 1 - Math.random();
+            let v = Math.random();
+            let z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+            return z * stdev + mean;
+        }
+
+        /** ------------ TEMPLATES -------------- **/
+        var stimulus_template = function(imgpath){
+            return(`<img src='${imgpath}'>`);
+        }
+
+        var feedback_stimulus_template = function(value){
+            if(value=="timeout")
+                return(`<div width='600px'><img src='stimuli/knockedout.png' width='300px'></div>`);
+            else
+                return(`<div style='position:relative;'>
+                    <img src='stimuli/coinstack/${value}.png' width='400px'>
+                    <div style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 100px; font-weight: bold;'>
+                        ${value}
+                    </div>
+                    </div>`);
+        }
+
+        /** ------------ GENERATE STIMPAIRS PER BLOCK -------------- **/
+        function generate_stimpairs(){
+            var pairs = [];
+            for(k=0; k<ntrials_per_stimpair; k++){
+                var cpairs = [];
+                for(i=0; i<(nstim-1); i++){
+                    for(j=i+1; j<nstim; j++){
+                        cpairs.push(jsPsych.randomization.shuffle([i,j]));
+                    }
+                }
+                cpairs = jsPsych.randomization.shuffle(cpairs);
+                pairs = pairs.concat(cpairs);
+            }
+            return pairs;
+        }
+
+        /** ------------ BUILD TIMELINE -------------- **/
+        var timeline = [];
+
+        // preload images
+        var images = ['stimuli/knockedout.png'];
+        for(let i=1; i<=nstim; i++){
+            images.push("stimuli/session1/"+i+".jpg");
+        }
+        for(let i=0; i<=reward_upper; i++){
+            images.push("stimuli/coinstack/"+i+".png");
+        }
+        timeline.push({
+            type: 'preload',
+            images: images
+        });
+
+        // fullscreen
+        if (fullscreen) {
+            timeline.push({
+                type: "fullscreen",
+                fullscreen_mode: true,
+                message: "We are now going to switch to fullscreen.<p>",
+                button_label: "Continue"
+            });
+        }
+
+        // minimal instruction
+        timeline.push({
+            type: 'html-button-response',
+            stimulus: `
+            <h2>SD Parameter Test</h2>
+            <p>You will complete <b>3 blocks</b> of ~5 minutes each.</p>
+            <p>In each block, choose the symbol you think gives more points.</p>
+            <div style="display:grid;grid-template-columns:300px 100px 300px;
+                      align-items: center;justify-items: center;">
+                <img src='stimuli/keyboard_key_f.png' width='80px'>
+                <div></div>
+                <img src='stimuli/keyboard_key_j.png' width='80px'>
+                <p>Press "<b>F</b>" for <b>left</b></p>
+                <div></div>
+                <p>Press "<b>J</b>" for <b>right</b></p>
+            </div>
+            `,
+            choices: ['Start']
+        });
+
+        /** ------------ BLOCKS -------------- **/
+        var choicetrial = {
+            type: "2afc-reward-mm",
+            stimuli: jsPsych.timelineVariable('stimuli'),
+            feedback_stimuli: jsPsych.timelineVariable('feedback_stimuli'),
+            feedback_duration: 500,
+            max_decision_time: 2000,
+            total_trial_duration: 3600,
+            width: "400px",
+            distance: "50px",
+            responses: {
+                left: "f",
+                right: "j"
+            },
+            data: jsPsych.timelineVariable('data'),
+            on_finish: function(data){
+                if(!debug){
+                    var tldat=jsPsych.data.get().filter({trial_type: "2afc-reward-mm"}).last(check_misses_nback).values();
+                    var nresp=tldat.map(function(el){return(Number(el.selected!="none"))}).reduce((a,b) => {return a+b;})
+                    if(tldat.length==check_misses_nback & nresp==0){
+                        alert("You have failed to respond to the last couple of trials!\nPlease click 'OK' to continue.\n"+
+                            "Note, however, that you will not get any credit if you fail to respond "+
+                            "to the images!");
+                        data.stopped_responding=1;
+                    }
+                }
+            },
+            extensions: []
+        }
+
+        var countdown = {
+            type: "countdown-mm",
+            prompt: "Get ready!",
+            duration: 1000,
+            countdown: 3
+        }
+
+        for(let block=0; block<3; block++){
+            var block_sd = sd_order[block];
+
+            // generate rewards for this block
+            var rewards = Array(nstim).fill().map((v,i) =>
+                getRandomWalk(ntrials_per_stim, block_sd, reward_lower, reward_upper));
+
+            // generate stimpairs for this block
+            var stimpairs = generate_stimpairs();
+            var stim_trialcount = Array(nstim).fill(0);
+
+            timeline.push(countdown);
+
+            for(let i=0; i<ntrials; i++){
+                var lstim = stimpairs[i][0];
+                var rstim = stimpairs[i][1];
+                var trial_design = {};
+                trial_design.data = {
+                    block: block+1,
+                    block_sd: block_sd,
+                    sd_order: JSON.stringify(sd_order),
+                    trial: i+1,
+                    left: lstim,
+                    right: rstim,
+                    lreward: rewards[lstim][stim_trialcount[lstim]],
+                    rreward: rewards[rstim][stim_trialcount[rstim]]
+                };
+                trial_design.stimuli = {
+                    left: stimulus_template(stimuli[lstim]),
+                    right: stimulus_template(stimuli[rstim])
+                };
+                trial_design.feedback_stimuli = {
+                    left: feedback_stimulus_template(rewards[lstim][stim_trialcount[lstim]]),
+                    right: feedback_stimulus_template(rewards[rstim][stim_trialcount[rstim]]),
+                    timeout: feedback_stimulus_template('timeout')
+                };
+
+                timeline.push({
+                    timeline: [choicetrial],
+                    timeline_variables: [trial_design]
+                });
+
+                stim_trialcount[lstim]++;
+                stim_trialcount[rstim]++;
+            }
+
+            // break between blocks (not after the last one)
+            if(block < 2){
+                timeline.push({
+                    type: 'html-button-response',
+                    stimulus: `
+                    <h2>Block ${block+1} of 3 complete</h2>
+                    <p>Take a short break if you need one.</p>
+                    <p>Click 'Continue' when you are ready for the next block.</p>
+                    `,
+                    choices: ['Continue']
+                });
+            }
+        }
+
+        /** ------------ FINAL -------------- **/
+        if (!debug) {
+            timeline.push({
+                type: "fullscreen",
+                fullscreen_mode: false,
+                message: "Thank you for participating!<p>Press 'end' to finish.",
+                button_label: "end"
+            });
+        }
+
+        /** ------------ START -------------- **/
+        jatos.onLoad(function() {
+            var collaborator_name = "unknown";
+            if(jatos.urlQueryParameters.hasOwnProperty("NAME")){
+                collaborator_name = jatos.urlQueryParameters["NAME"];
+            }
+
+            jsPsych.data.addProperties({
+                uid: uid,
+                name: collaborator_name,
+                date: datetime,
+                sd_order: JSON.stringify(sd_order),
+                stopped_responding: 0
+            });
+
+            jsPsych.init({
+                timeline: timeline,
+                extensions: [],
+                on_finish: function () {
+                    var resultCsv = jsPsych.data.get().csv();
+                    jatos.uploadResultFile(resultCsv, uid+"_sdtest_result.txt")
+                        .then(() => console.log("File was successfully uploaded"))
+                        .catch(() => console.log("File upload failed"));
+
+                    var resultJson = jsPsych.data.get().json();
+                    jatos.uploadResultFile(resultJson, uid+"_sdtest_result_json.json")
+                        .then(() => console.log("File was successfully uploaded"))
+                        .catch(() => console.log("File upload failed"));
+
+                    jatos.submitResultData(resultCsv, jatos.startNextComponent);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
