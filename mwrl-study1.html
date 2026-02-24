@@ -281,7 +281,7 @@
                 `<h2>Welcome to this experiment!</h2>
                 <p>In this task, you will see pairs of unfamiliar symbols.
                     Each symbol can give you a certain amount of points and you
-                    should try to learn which symbol gives you most points. 
+                    should try to learn which symbol gives you the most points.
                 <p>The symbols are Chinese letters and look like this:</p> 
                 <p style="text-align:center;">
                     <img src='stimuli/session2/1.jpg' width='200px'>
@@ -322,7 +322,7 @@
                 <ul>
                 <li>Each symbol has a <b>numerical value</b> that tells you how many points
                     you can earn with this symbol.</li>
-                <li>The minimum number of points is <b>zero</b>. That means, you can never lose any points.</li>
+                <li>The minimum number of points is <b>zero</b>. That means you can never lose any points.</li>
                 <li>The maximum number of points is <b>20 points</b>.</li>
                 <li>During the task, you will not know beforehand how many points 
                     you will get for each symbol.</li>
@@ -355,10 +355,10 @@
                 <br>
                 <ul>
                 <li>The <b>value</b> of each symbol <b>will change gradually</b> during the task. 
-                    This means, that a symbol can give you a different number of points each time you
+                    This means that a symbol can give you a different number of points each time you
                     see it.</li>
                 <li>In the example, the symbol changes from 15 points to 9 points to 10 points.</li>
-                <li>The changes are <b>very slow</b>. That means, if a symbol gives you many points
+                <li>The changes are <b>very slow</b>. That means if a symbol gives you many points
                     at one time, it is likely that it will give you many points the next time as well.</li>
                 </ul>
                 `,
@@ -366,14 +366,15 @@
                 <h2>Your goal in this task</h2>
                 <br>
                 <ul>
-                <li><b>Your main goal</b> is to guess which of the two symbols will give you most
-                    points and to select it by pressing the corresponding key. 
+                <li><b>Your main goal</b> is to guess which of the two symbols will give you the most
+                    points and to select it by pressing the corresponding key.
                 <li>The points will <b>add up</b> so that you can increase your overall score by
                 choosing the best symbol in each round.
+                However, you will not see your overall score during the task.
                 </ul>
                 `,
                 `
-                <h2>There are many symbols</h2>
+                <h2>There are six symbols</h2>
                 <br>
                 <div style="display:grid;grid-template-columns:250px 250px 250px;
                           align-items: center;justify-items: center; margin-bottom: 20px;">
@@ -385,8 +386,8 @@
                     <img src='stimuli/session2/6.jpg' width='120px'>
                 </div>
                 <ul>
-                <li>There are <b>many different symbols</b> in this task. 
-                    You will see a different pair of symbols in each round.
+                <li>There are <b>six different symbols</b> in this task.
+                    Therefore, you will see different pairs of symbols during the task.
                 <li>Each symbol has its own number of points.
                 <li>The number of points for each symbol changes each time you see one of the symbols.
                 </ul>
@@ -400,6 +401,7 @@
                 <center><img src="stimuli/knockedout.png" width="100px"></center>
                 <p>Try to <b>avoid</b> this kind of negative feedback in order to collect
                     as many points as possible!</p>
+                <p>If you get too much negative feedback, you may even be disqualified from the task.</p>
                 `,
                 `
                 <h2>Are you paying attention?</h2>
@@ -409,8 +411,8 @@
                 This is normal and happens to everyone and it is not a problem for this task. Your earned points
                 will not depend on your focus.
                 <br>
-                However, we would like to ask you to tell us whether you are currently focussed or
-                thinking about something else. We will occasionally show you these two smileys:
+                However, we would like to ask you to honestly tell us whether you are currently focused or
+                thinking about something else. We will occasionally show you these two emojis:
                 <div style="display:grid;grid-template-columns:300px 100px 300px;
                           align-items: center;justify-items: center;">
                     <img src='stimuli/ontask.png' width='150px'>
@@ -420,7 +422,7 @@
                     <div></div>
                     <b>(not paying attention)</b>
                 </div>
-                and we would like you to tell us which one of the two smileys describes you best at the moment.
+                and we would like you to tell us which one of the two emojis describes you best at the moment.
                 If you are currently paying attention, please press the "<b>F</b>"-key. If you are currently
                 not paying attention or mind wandering, please press the "<b>J</b>"-key.
                 `,
@@ -428,7 +430,10 @@
                 <h2>How motivated are you?</h2>
                 <br>
                 <p>
-                Right after each attention question, we will also ask you about your current <b>motivation</b>.
+                Right after each attention question, we will also ask you about
+                how motivated you feel to do the task in this particular moment.
+                Again, we would appreciate if you answered honestly. Remember that there is nothing wrong
+                with not feeling very motivated, we are interested in your current feeling.
                 You will see these two symbols:
                 <div style="display:grid;grid-template-columns:300px 100px 300px;
                           align-items: center;justify-items: center;">
@@ -558,7 +563,7 @@
                     trying all of the symbols.
                 <li><b>Don't forget!</b>: The number of points you get changes all the time!
                 <li>Remember, your goal is to optimize your choices and get <b>as many points as possible!</b>
-                <li>Please respond honestly when telling us about your attention, it will not affect your points.
+                <li>Please respond honestly when telling us about your attention and motivation, it will not affect your points.
                 </ul>
                 `,
                 `
@@ -666,8 +671,9 @@
         var agency_slider = {
             type: 'html-slider-response',
             stimulus: `<h3>Sense of control</h3>
-                <p>How much control did you feel you had over the outcomes<br>
-                (i.e., the points you received)?</p>`,
+                <p>How much control did you feel you had over the outcomes during the task?<br>
+                In other words, to what level did you feel you could influence the points
+                you earned by choosing between the two symbols?</p>`,
             labels: ['0<br>No control at all', '50', '100<br>Complete control'],
             min: 0,
             max: 100,
@@ -712,7 +718,7 @@
             timeline.push({
                 type: "fullscreen",
                 fullscreen_mode: false,
-                message: "Thank you for participating!<p>Press 'end experiment' to return to normal window mode.",
+                message: "Thank you for participating!<p>Once you click the button below, you will be automatically directed to another webpage where we ask you to respond to a number of questions.</p>",
                 button_label: "end experiment"
             });
         }

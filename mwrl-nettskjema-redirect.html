@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="/assets/javascripts/jatos.js"></script>
+</head>
+<body>
+    <p>Redirecting to questionnaire...</p>
+    <script>
+        jatos.onLoad(function() {
+            var pid = jatos.urlQueryParameters.PROLIFIC_PID || "unknown";
+            var url = "https://nettskjema.no/a/597698" +
+                      "?CBprolific_id=" + encodeURIComponent(pid) +
+                      "&LCKprolific_id=true";
+            window.location.href = url;
+        });
+    </script>
+</body>
+</html>
