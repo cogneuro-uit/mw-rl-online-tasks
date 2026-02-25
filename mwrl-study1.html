@@ -259,6 +259,40 @@
             duration: 1000,
             countdown: 3
         }
+        var consent_screen = {
+            type: 'html-button-response',
+            stimulus: `
+            <h2>Informed Consent</h2>
+            <div style="text-align: left; max-width: 700px; margin: 0 auto;">
+            <p>The principal investigator of this study is professor Gábor Csifcsák from the
+                Institute of Psychology, UiT The Arctic University of Norway, Tromsø, Norway.</p>
+            <p>The study has been approved by the internal Ethics Committee (IPS-REC) of
+                the Institute of Psychology, UiT The Arctic University of Norway.</p>
+            <p><b>Voluntary participation and the right to withdraw:</b></p>
+            <ul>
+                <li>Participation in this project is entirely voluntary.</li>
+                <li>You have the right to cease data collection and withdraw your consent at any
+                    point in time, without the necessity of providing any reason for your decision.
+                    In such an event, any data gathered from you will be deleted immediately.</li>
+            </ul>
+            <p><b>Privacy and data storage:</b></p>
+            <ul>
+                <li>All the collected data will be gathered anonymously and is marked with a unique
+                    code that cannot be linked to your name, email or IP address.</li>
+                <li>Results from the analyses will be published in scientific journals. Your anonymous
+                    data will be uploaded to a scientific repository (at <a href="https://osf.io/" target="_blank">OSF</a>)
+                    and openly shared with researchers or other interested parties online.</li>
+            </ul>
+            <p><b>For further questions please contact:</b>
+                <a href="mailto:gabor.csifcsak@uit.no">gabor.csifcsak@uit.no</a></p>
+            </div>
+            <p><b>By clicking the button below, you confirm that you have read and understood the
+                information above, and you agree to participate in this study.</b></p>
+            `,
+            choices: ['I agree to participate']
+        }
+        timeline.push(consent_screen);
+
         if (fullscreen) {
             timeline.push({
                 type: "fullscreen",
