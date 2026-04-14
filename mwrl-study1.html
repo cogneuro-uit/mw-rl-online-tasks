@@ -283,6 +283,9 @@
                     data will be uploaded to a scientific repository (at <a href="https://osf.io/" target="_blank">OSF</a>)
                     and openly shared with researchers or other interested parties online.</li>
             </ul>
+            <p><b>Please note that you will not be allowed to multi-task during the study, you need to complete 
+                the whole study without looking at other windows on your screen. 
+                If you fail to comply, you may not be paid.</b></p>
             <p><b>For further questions please contact:</b>
                 <a href="mailto:gabor.csifcsak@uit.no">gabor.csifcsak@uit.no</a></p>
             </div>
@@ -744,7 +747,7 @@
                 rows: 10}
           ]
         }
-        timeline.push(comments);
+        //timeline.push(comments);
 
 
         /** ------------ FINAL CLEAN UP -------------- **/
@@ -752,7 +755,12 @@
             timeline.push({
                 type: "fullscreen",
                 fullscreen_mode: false,
-                message: "Thank you for participating!<p>Once you click the button below, you will be automatically directed to another webpage where we ask you to respond to a number of questions.</p>",
+                message:
+                    "Thank you for participating!" +
+                    "<p>Once you click the button below, you will be automatically directed to " +
+                    "another webpage where we ask you to respond to a number of questions.</p>" +
+                    "<p>If the redirect does not work, please click the following link: " +
+                    "<a href='https://nettskjema.no/a/597698' target='_blank'>https://nettskjema.no/a/597698</a>.</p>",
                 button_label: "end experiment"
             });
         }
