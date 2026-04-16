@@ -846,6 +846,9 @@ Identical to mwrl_study1.html but with higher drift rate SD=6
             // also adds the prolific properties if they have been set
             jsPsych.data.addProperties({
                 uid: uid,
+                study: 3,
+                framing: "gain",
+                randwalk_sigma: randwalk_sigma,
                 prolific_pid: prolific_pid,
                 prolific_studyid: prolific_studyid,
                 prolific_sessionid: prolific_sessionid,
